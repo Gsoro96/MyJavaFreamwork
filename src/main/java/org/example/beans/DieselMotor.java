@@ -1,7 +1,7 @@
 package org.example.beans;
 
-import org.example.beans.annotations.MyBean;
-import org.example.beans.annotations.MyPrimary;
+import org.example.annotations.MyBean;
+import org.example.annotations.MyPrimary;
 
 @MyBean
 @MyPrimary

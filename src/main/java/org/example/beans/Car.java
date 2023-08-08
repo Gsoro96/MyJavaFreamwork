@@ -1,7 +1,7 @@
 package org.example.beans;
 
-import org.example.beans.annotations.MyBean;
-import org.example.beans.annotations.MyInjection;
+import org.example.annotations.MyBean;
+import org.example.annotations.MyInjection;
 
 @MyBean
 public class Car implements Vehicle {

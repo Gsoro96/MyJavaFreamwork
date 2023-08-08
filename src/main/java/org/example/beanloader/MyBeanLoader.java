@@ -1,6 +1,6 @@
 package org.example.beanloader;
 
-import org.example.beans.annotations.MyBean;
+import org.example.annotations.MyBean;
 import org.example.container.MyBeanContainer;
 
 import java.io.File;

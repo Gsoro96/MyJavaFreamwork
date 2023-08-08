@@ -1,6 +1,6 @@
 package org.example.container;
 
-import org.example.beans.annotations.MyPrimary;
+import org.example.annotations.MyPrimary;
 import org.example.exceptions.MultipleBeansFoundException;
 
 import java.util.ArrayList;
