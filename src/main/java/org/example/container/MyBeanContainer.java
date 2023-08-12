@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.example.utils.MyBeanUtils.objectHasAnnotationOfType;
+
 public class MyBeanContainer {
 
     List<Object> beans = new ArrayList<>();
@@ -42,7 +44,7 @@ public class MyBeanContainer {
         List<Object> primaryBeans = beans.stream()
                 .filter(this::isPrimaryBean)
                 .collect(Collectors.toList());
-        if(primaryBeans.isEmpty() || primaryBeans.size() != 1){
+        if(primaryBeans.size() != 1){
             throw new MultipleBeansFoundException();
         }else {
             return primaryBeans.get(0);
@@ -50,6 +52,6 @@ public class MyBeanContainer {
     }
 
     private boolean isPrimaryBean(Object bean) {
-        return Arrays.stream(bean.getClass().getAnnotations()).anyMatch(annotation -> annotation instanceof MyPrimary);
+        return objectHasAnnotationOfType(bean, MyPrimary.class);
     }
 }

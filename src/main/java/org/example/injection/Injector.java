@@ -5,6 +5,8 @@ import org.example.container.MyBeanContainer;
 
 import java.util.Arrays;
 
+import static org.example.utils.MyBeanUtils.fieldHasAnnotationOfType;
+
 
 public class Injector {
     private final MyBeanContainer beanContainer;
@@ -16,7 +18,7 @@ public class Injector {
     public void performDependencyInjection() {
         beanContainer.getBeans().forEach(bean -> {
             Arrays.stream(bean.getClass().getDeclaredFields()).forEach(field -> {
-                if (Arrays.stream(field.getAnnotations()).anyMatch(annotation -> annotation instanceof MyInjection)) {
+                if (fieldHasAnnotationOfType(field,MyInjection.class)) {
                     Object objToBeInjected = beanContainer.getBean(field.getType());
                     field.setAccessible(true);
                     try {

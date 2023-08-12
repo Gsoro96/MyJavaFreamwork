@@ -5,11 +5,13 @@ import org.example.container.MyBeanContainer;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import org.apache.commons.io.FilenameUtils;
+
+import static org.example.utils.MyBeanUtils.classHasAnnotationOfType;
+
 
 public class MyBeanLoader {
     private final MyBeanContainer beanContainer;
@@ -21,7 +23,7 @@ public class MyBeanLoader {
     public void loadBeans(String classPath) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Set<Class<?>> classes = loadAllClassesInClassPath(classPath);
         for (Class<?> clazz : classes) {
-            if (Arrays.stream(clazz.getAnnotations()).anyMatch(MyBean.class::isInstance)) {
+            if (classHasAnnotationOfType(clazz, MyBean.class)) {
                 beanContainer.registerBean(clazz.getConstructor().newInstance());
             }
         }
