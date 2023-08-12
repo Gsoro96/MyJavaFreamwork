@@ -1,30 +1,32 @@
-package org.example.beanloader;
+package org.example.myhibernate.loader;
 
-import org.example.annotations.MyBean;
-import org.example.container.MyBeanContainer;
+import org.apache.commons.io.FilenameUtils;
+
+import org.example.annotations.MyEntity;
+import org.example.myhibernate.container.EntitiesContainer;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import org.apache.commons.io.FilenameUtils;
 
 import static org.example.utils.MyBeanUtils.classHasAnnotationOfType;
 
+public class EntitiesLoader {
 
-public class MyBeanLoader {
-    private final MyBeanContainer beanContainer;
+    private final EntitiesContainer entitiesContainer;
 
-    public MyBeanLoader(MyBeanContainer beanContainer) {
-        this.beanContainer = beanContainer;
+    public EntitiesLoader(EntitiesContainer entitiesContainer) {
+        this.entitiesContainer = entitiesContainer;
     }
 
-    public void loadBeans(String classPath) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+
+    public void loadEntities(String classPath)  {
         Set<Class<?>> classes = loadAllClassesInClassPath(classPath);
         for (Class<?> clazz : classes) {
-            if (classHasAnnotationOfType(clazz, MyBean.class)) {
-                beanContainer.registerBean(clazz.getConstructor().newInstance());
+            if (classHasAnnotationOfType(clazz, MyEntity.class)) {
+                entitiesContainer.registerEntity(clazz);
             }
         }
     }

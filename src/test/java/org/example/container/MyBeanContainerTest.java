@@ -2,6 +2,7 @@ package org.example.container;
 
 import org.example.annotations.MyBean;
 import org.example.annotations.MyPrimary;
+import org.example.beans.container.MyBeanContainer;
 import org.example.exceptions.MultipleBeansFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

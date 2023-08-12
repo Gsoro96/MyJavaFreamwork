@@ -2,7 +2,8 @@ package org.example.injection;
 
 import org.example.annotations.MyBean;
 import org.example.annotations.MyInjection;
-import org.example.container.MyBeanContainer;
+import org.example.beans.container.MyBeanContainer;
+import org.example.beans.injection.Injector;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

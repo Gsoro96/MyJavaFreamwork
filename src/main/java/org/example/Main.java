@@ -1,19 +1,17 @@
 package org.example;
 
-import org.example.beanloader.MyBeanLoader;
+import org.example.beans.loader.MyBeanLoader;
 import org.example.beans.Car;
-import org.example.container.MyBeanContainer;
-import org.example.injection.Injector;
+import org.example.beans.container.MyBeanContainer;
+import org.example.beans.injection.Injector;
 import org.example.myhibernate.EntityCreator;
+import org.example.myhibernate.container.EntitiesContainer;
+import org.example.myhibernate.loader.EntitiesLoader;
 
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Main {
-    public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, SQLException {
+    public static void main(String[] args) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         // Create Bean Container
         MyBeanContainer beanContainer = new MyBeanContainer();
         MyBeanLoader beanLoader = new MyBeanLoader(beanContainer);
@@ -28,7 +26,10 @@ public class Main {
         bean.makeSomeNoise();
 
 
-        EntityCreator entityCreator = new EntityCreator(beanContainer);
+        EntitiesContainer entitiesContainer = new EntitiesContainer();
+        EntitiesLoader entitiesLoader = new EntitiesLoader(entitiesContainer);
+        entitiesLoader.loadEntities("./target/classes");
+        EntityCreator entityCreator = new EntityCreator(entitiesContainer);
         entityCreator.createEntities();
     }
 }

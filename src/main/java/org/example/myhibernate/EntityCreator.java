@@ -1,9 +1,8 @@
 package org.example.myhibernate;
 
-import org.example.annotations.MyEntity;
 import org.example.annotations.MyId;
-import org.example.container.MyBeanContainer;
 import org.example.exceptions.EntityMisuseException;
+import org.example.myhibernate.container.EntitiesContainer;
 
 import java.lang.reflect.Field;
 import java.sql.Connection;
@@ -14,29 +13,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.example.utils.MyBeanUtils.fieldHasAnnotationOfType;
+
 public class EntityCreator {
 
-    private final MyBeanContainer beanContainer;
+    private final EntitiesContainer entitiesContainer;
 
-    public EntityCreator(MyBeanContainer beanContainer) {
-        this.beanContainer = beanContainer;
+    public EntityCreator(EntitiesContainer entitiesContainer) {
+        this.entitiesContainer = entitiesContainer;
     }
 
-    public void createEntities(){
-        List<Object> entities = beanContainer.getBeans().stream()
-                .filter(bean -> Arrays.stream(bean.getClass().getAnnotations()).anyMatch(annotation -> annotation instanceof MyEntity))
-                .collect(Collectors.toList());
+    public void createEntities() {
 
-        entities.forEach(entity -> {
-            String sql = "CREATE TABLE IF NOT EXISTS " + entity.getClass().getSimpleName();
+
+
+        entitiesContainer.getEntities().forEach(entity -> {
+            String sql = "CREATE TABLE IF NOT EXISTS " + entity.getSimpleName();
             String open_parenthesis = " (";
             String close_parenthesis = " );";
 
             sql = sql + open_parenthesis;
 
-            Field[] declaredFields = entity.getClass().getDeclaredFields();
+            Field[] declaredFields = entity.getDeclaredFields();
             List<Field> idFields = Arrays.stream(declaredFields)
-                    .filter(field -> Arrays.stream(field.getAnnotations()).anyMatch(annotation -> annotation instanceof MyId))
+                    .filter(field -> fieldHasAnnotationOfType(field, MyId.class))
                     .collect(Collectors.toList());
             validateFields(idFields);
 
@@ -55,15 +55,16 @@ public class EntityCreator {
 
     }
 
-    private void validateFields(List<Field> fields){
-        if(fields.isEmpty()){
+    private void validateFields(List<Field> fields) {
+        if (fields.isEmpty()) {
             throw new EntityMisuseException("@MyId is missing");
         }
-        if(fields.size() != 1){
+        if (fields.size() != 1) {
             throw new EntityMisuseException("@MyId should not be used multiple times");
         }
 
     }
+
     private void createDB(String sql) throws SQLException {
         Connection c = null;
         Statement stmt = null;
@@ -81,8 +82,10 @@ public class EntityCreator {
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         } finally {
-            stmt.close();
-            c.close();
+            if(stmt != null){
+                stmt.close();
+                c.close();
+            }
         }
     }
 }

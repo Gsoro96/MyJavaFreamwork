@@ -1,6 +1,7 @@
 package org.example.beanloader;
 
-import org.example.container.MyBeanContainer;
+import org.example.beans.loader.MyBeanLoader;
+import org.example.beans.container.MyBeanContainer;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

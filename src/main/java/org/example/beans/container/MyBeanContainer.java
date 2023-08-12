@@ -1,4 +1,4 @@
-package org.example.container;
+package org.example.beans.container;
 
 import org.example.annotations.MyPrimary;
 import org.example.exceptions.MultipleBeansFoundException;

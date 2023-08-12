@@ -1,7 +1,7 @@
-package org.example.injection;
+package org.example.beans.injection;
 
 import org.example.annotations.MyInjection;
-import org.example.container.MyBeanContainer;
+import org.example.beans.container.MyBeanContainer;
 
 import java.util.Arrays;
 
