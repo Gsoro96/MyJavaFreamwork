@@ -21,7 +21,7 @@ public class MyBeanLoader {
     public void loadBeans(String classPath) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         Set<Class<?>> classes = loadAllClassesInClassPath(classPath);
         for (Class<?> clazz : classes) {
-            if (Arrays.stream(clazz.getAnnotations()).anyMatch(annotation -> annotation instanceof MyBean)) {
+            if (Arrays.stream(clazz.getAnnotations()).anyMatch(MyBean.class::isInstance)) {
                 beanContainer.registerBean(clazz.getConstructor().newInstance());
             }
         }
@@ -35,6 +35,11 @@ public class MyBeanLoader {
 
     private void loadAllClassesInClassPath(String classPath, Set<Class<?>> classes) {
         File pkgF = new File(classPath);
+
+        if(pkgF == null || pkgF.listFiles() == null || pkgF.listFiles().length == 0){
+            throw new RuntimeException(String.format("No such file as: %s",classPath));
+        }
+
         for (File fileEntry : Objects.requireNonNull(pkgF.listFiles())) {
             if (fileEntry.isDirectory()) {
                 loadAllClassesInClassPath(fileEntry.toString(), classes);
