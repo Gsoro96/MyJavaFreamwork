@@ -4,6 +4,7 @@ import org.example.annotations.MyBean;
 import org.example.annotations.MyPrimary;
 import org.example.exceptions.MultipleBeansFoundException;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -19,6 +20,11 @@ class MyBeanContainerTest {
 
     @BeforeAll
     static void setup() {
+        myBeanContainer = new MyBeanContainer();
+    }
+
+    @BeforeEach
+    void clean(){
         myBeanContainer = new MyBeanContainer();
     }
 
@@ -45,14 +51,12 @@ class MyBeanContainerTest {
     }
 
     @MyBean
-    class TestBean1 implements TestInterface {
-
+    static class TestBean1 implements TestInterface {
     }
 
     @MyBean
     @MyPrimary
-    class TestBean2 implements TestInterface {
-
+    static class TestBean2 implements TestInterface {
     }
 
     @Test
@@ -103,7 +107,7 @@ class MyBeanContainerTest {
     }
 
     @Test
-    void test_when_getPrimaryBean_is_called_and_there_are_multiple_primary_beans_throw_MultipleBeansFoundException() throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    void test_when_getPrimaryBean_is_called_and_there_are_multiple_primary_beans_throw_MultipleBeansFoundException() throws NoSuchMethodException {
         Method getPrimaryBean = myBeanContainer.getClass().getDeclaredMethod("getPrimaryBean", List.class);
         getPrimaryBean.setAccessible(true);
 
@@ -115,7 +119,7 @@ class MyBeanContainerTest {
 
         try {
             getPrimaryBean.invoke(myBeanContainer, objects);
-        }catch (Exception e){
+        } catch (Exception e) {
             assertTrue(e.getCause() instanceof MultipleBeansFoundException);
         }
     }
