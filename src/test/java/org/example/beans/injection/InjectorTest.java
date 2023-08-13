@@ -1,4 +1,4 @@
-package org.example.injection;
+package org.example.beans.injection;
 
 import org.example.annotations.MyBean;
 import org.example.annotations.MyInjection;
